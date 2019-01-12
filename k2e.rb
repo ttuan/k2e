@@ -30,12 +30,17 @@ def create_evernote_note subject_content, body_content
 end
 
 def last_sync_date
-  file_name = "./last_sync_date"
+  file_name = "./last_sync_date.txt"
   unless File.file?(file_name)
     File.open(file_name, "w") {|file| file.write("1970-01-01T00:00:00+07:00")}
   end
 
   @sync_date ||= DateTime.parse File.read(file_name)
+end
+
+def update_last_sync_date
+  file_name = "./last_sync_date.txt"
+  File.open(file_name, "w") {|file| file.write(DateTime.now)}
 end
 
 def parse_highlights
@@ -47,7 +52,7 @@ def parse_highlights
   highlights.group_by(&:book_title).each do |book_title, book_highlights|
     next if book_highlights.empty?
 
-    subject_content = "#{book_title}#{book_highlights.first.author} +"
+    subject_content = "#{book_title} @#{ENV["NOTEBOOK"]} #notes +"
     body_content = ""
 
     book_highlights.each do |highlight|
@@ -68,6 +73,8 @@ def parse_highlights
 
     create_evernote_note subject_content, body_content
   end
+
+  update_last_sync_date
 end
 
 parse_highlights
