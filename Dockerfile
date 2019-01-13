@@ -1,7 +1,5 @@
 FROM ruby:2.5.1
 
-# RUN apt-get install -y build-essential
-
-RUN gem install kindleclippings dotenv
+RUN gem install kindleclippings dotenv evernote_oauth
 
 COPY . /opt/kindle-to-evernote/
