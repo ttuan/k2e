@@ -2,6 +2,7 @@
 
 require "dotenv/load"
 require "evernote_oauth"
+require "pry"
 
 module Evernote
   class Client
@@ -22,7 +23,7 @@ module Evernote
     def initialize title:, content:, notebook_name:
       @note_store = ::Evernote::Client.new.note_store
       @title = title
-      @content = format_xml content
+      @content = content
       @notebook = find_notebook notebook_name
     end
 
@@ -30,17 +31,18 @@ module Evernote
       new_note = Evernote::EDAM::Type::Note.new
 
       new_note.title = title
-      new_note.content = content
 
       filter = Evernote::EDAM::NoteStore::NoteFilter.new words: title
+      filter.notebookGuid = notebook.guid
       found_note = note_store.findNotes(::Evernote::Client.new.token, filter, OFFSET, MAX_RESULT_NUM).notes.first
 
-      if found_note
+      if found_note&.title == new_note.title
         full_note_content = note_store.getNote(::Evernote::Client.new.token, found_note.guid, true, true, false, false)
         new_note.guid = found_note.guid
-        new_note.content = full_note_content.content + new_note.content
+        new_note.content = full_note_content.content.gsub /<\/en-note>/ , "#{content}</en-note>"
         note_store.updateNote(::Evernote::Client.new.token, new_note)
       else
+        new_note.content = format_xml content
         new_note.notebookGuid = notebook.guid
         note_store.createNote new_note
       end

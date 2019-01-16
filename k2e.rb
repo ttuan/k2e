@@ -1,8 +1,10 @@
+$LOAD_PATH << File.dirname(__FILE__)
+
 require "kindleclippings"
 require "dotenv/load"
-require "./lib/date_checker"
-require "./lib/evernote"
-require "./lib/kindle"
+require "./lib/date_checker.rb"
+require "./lib/evernote.rb"
+require "./lib/kindle.rb"
 
 class K2e
   include DateChecker
@@ -23,6 +25,8 @@ class K2e
 
       note.update
     end
+
+    update_last_sync_date
   end
 end
 

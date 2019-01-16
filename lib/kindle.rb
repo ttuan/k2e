@@ -1,4 +1,4 @@
-require "./lib/date_checker"
+require "./lib/date_checker.rb"
 require "kindleclippings"
 require "time"
 
