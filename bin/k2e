@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "k2e"
+
+if ENV["NOTEBOOK"].nil? || ENV["EVERNOTE_DEV_TOKEN"].nil?
+  puts "Please config ENV variables!"
+else
+  K2e.sync
+end
