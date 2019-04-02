@@ -1,3 +1,3 @@
 module K2e
-  VERSION = "0.0.1"
+  VERSION = "0.0.2"
 end

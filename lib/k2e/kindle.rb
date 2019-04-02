@@ -44,10 +44,11 @@ module K2e
 
     private
     def clippings_file_path
-      # TODO: Check with other platform
       case Gem::Platform.local.os
       when "darwin"
         "/Volumes/Kindle/documents/My\ Clippings.txt"
+      when "linux"
+        "/media/#{ENV["USER"]}/Kindle/documents/My\ Clippings.txt"
       end
     end
   end
